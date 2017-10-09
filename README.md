@@ -1,4 +1,4 @@
-# python_study
-python学习
-####有简单到难的几个demo
+#### Python学习：
+- requests库的学习；
+- beautiful soup库的学习；
 
