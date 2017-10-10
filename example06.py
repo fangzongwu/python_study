@@ -2,6 +2,7 @@
 import requests
 import bs4
 from bs4 import BeautifulSoup
+import os
 
 
 #获取网页内容信息
@@ -22,14 +23,31 @@ def fillImageList(ulist, html):
 	for tr in soup.find_all('img', height='150'):
 		if isinstance(tr, bs4.element.Tag):
 			ulist.append(tr.attrs['src'])
-			print(ulist)
+			# print(ulist)
 
 
 
 
 #利用数据结构展示并输出结果
-def printImageList():
-	pass
+def printImageList(ulist):
+	root = "E://project/python_worm/images/"
+	for img in ulist:
+		path = root + img.split('/')[-1]
+		try:
+			if not os.path.exists(root):
+				os.mkdir(root)
+			if not os.path.exists(path):
+				r = requests.get(img, timeout=30)
+				r.raise_for_status()
+				r.encoding = r.apparent_encoding
+				with open(path, "wb") as f:
+					f.write(r.content)
+					print("图片保存成功")
+					f.close()
+			else:
+				return print("图片已经存在")
+		except:
+			return print("爬取出现异常")
 
 
 
@@ -39,7 +57,7 @@ def main():
 	url = 'http://www.nationalgeographic.com.cn/'
 	html = getHTMLImage(url)
 	fillImageList(imageList, html)
-
+	printImageList(imageList)
 
 
 
